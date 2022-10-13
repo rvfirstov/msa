@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class GreetingController {
+public class FoodController {
 
   private int updateCounter = 1;
 
@@ -33,11 +33,6 @@ public class GreetingController {
         .orElse(new HashMap<>() {{
           put(id, "Order not found");
         }});
-  }
-
-  @GetMapping
-  public List<Map<String, String>> list() {
-    return orders;
   }
 
   @GetMapping("{id}")
