@@ -70,4 +70,10 @@ public class EmployeesController {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
   }
+
+  @PostMapping("/addEmployees")
+  public ResponseEntity<Employees> addEmployees(@RequestBody List<Employees> employees) {
+    employeesService.addEmployees(employees);
+    return new ResponseEntity<>(HttpStatus.CREATED);
+  }
 }
