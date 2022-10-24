@@ -4,12 +4,19 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
 
   <changeSet id="1" author="Roman Firstov">
-
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <tableExists tableName="employees"/>
+      </not>
+    </preConditions>
     <createTable tableName="employees">
       <column name="id" type="serial"/>
       <column name="name" type="varchar(50)"/>
       <column name="age" type="numeric"/>
     </createTable>
+    <addPrimaryKey columnNames="id"
+      constraintName="pk_employees"
+      tableName="employees"/>
+    <addNotNullConstraint tableName="employees" columnName="name"/>
   </changeSet>
-
 </databaseChangeLog>
