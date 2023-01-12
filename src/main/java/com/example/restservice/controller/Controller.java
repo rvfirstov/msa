@@ -1,7 +1,9 @@
 package com.example.restservice.controller;
 
-import com.example.restservice.model.Employees;
-import com.example.restservice.service.EmployeesService;
+import com.example.restservice.model.Customer;
+import com.example.restservice.model.Order;
+import com.example.restservice.service.CustomerService;
+import com.example.restservice.service.OrderService;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -17,15 +19,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/v1/employees")
+@RequestMapping("/v1/customers")
 @RequiredArgsConstructor
-public class EmployeesController {
+public class Controller {
 
-  private final EmployeesService employeesService;
+  private final CustomerService customerService;
+  private final OrderService orderService;
 
   @GetMapping
-  public ResponseEntity<List<Employees>> getAll() {
-    List<Employees> list = employeesService.getAll();
+  public ResponseEntity<List<Customer>> getAll() {
+    List<Customer> list = customerService.getAll();
     if (list.isEmpty()) {
       return new ResponseEntity<>(list, HttpStatus.NOT_FOUND);
     } else {
@@ -34,8 +37,8 @@ public class EmployeesController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Employees> getById(@PathVariable("id") Long id) {
-    Optional<Employees> optional = employeesService.getById(id);
+  public ResponseEntity<Customer> getById(@PathVariable("id") Long id) {
+    Optional<Customer> optional = customerService.getById(id);
     if (optional.isPresent()) {
       return new ResponseEntity<>(optional.get(), HttpStatus.OK);
     } else {
@@ -44,18 +47,18 @@ public class EmployeesController {
   }
 
   @PostMapping
-  public ResponseEntity<Employees> create(@RequestBody Employees employees) {
-    return new ResponseEntity<>(employeesService.save(employees), HttpStatus.CREATED);
+  public ResponseEntity<Customer> create(@RequestBody Customer customer) {
+    return new ResponseEntity<>(customerService.saveOrUpdate(customer), HttpStatus.CREATED);
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Employees employeesDto) {
-    Optional<Employees> optional = employeesService.getById(id);
+  public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Customer customerDto) {
+    Optional<Customer> optional = customerService.getById(id);
     if (optional.isPresent()) {
-      Employees employees = optional.get();
-      employees.setName(employeesDto.getName());
-      employees.setAge(employeesDto.getAge());
-      return new ResponseEntity<>(employeesService.save(employees), HttpStatus.OK);
+      Customer customer = optional.get();
+      customer.setName(customerDto.getName());
+      customer.setMoney(customerDto.getMoney());
+      return new ResponseEntity<>(customerService.saveOrUpdate(customer), HttpStatus.OK);
     } else {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -64,16 +67,17 @@ public class EmployeesController {
   @DeleteMapping("/{id}")
   public ResponseEntity<?> delete(@PathVariable Long id) {
     try {
-      employeesService.delete(id);
+      customerService.delete(id);
       return new ResponseEntity<>(HttpStatus.OK);
     } catch (Exception e) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
   }
 
-  @PostMapping("/addEmployees")
-  public ResponseEntity<Employees> addEmployees(@RequestBody List<Employees> employees) {
-    employeesService.addEmployees(employees);
-    return new ResponseEntity<>(HttpStatus.CREATED);
+  @PostMapping("/buyGoods")
+  public ResponseEntity<String> buyGoods(@RequestBody Order order) {
+    /*создание заказа на покупку товара*/
+    orderService.createOrder(order);
+    return new ResponseEntity<>("заказ успешно оплачен и ожидает обработки", HttpStatus.CREATED);
   }
 }

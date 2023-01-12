@@ -6,17 +6,36 @@
   <changeSet id="1" author="Roman Firstov">
     <preConditions onFail="MARK_RAN">
       <not>
-        <tableExists tableName="employees"/>
+        <tableExists tableName="customer"/>
       </not>
     </preConditions>
-    <createTable tableName="employees">
+    <createTable tableName="customer">
       <column name="id" type="serial"/>
       <column name="name" type="varchar(50)"/>
-      <column name="age" type="numeric"/>
+      <column name="money" type="numeric"/>
     </createTable>
     <addPrimaryKey columnNames="id"
-      constraintName="pk_employees"
-      tableName="employees"/>
-    <addNotNullConstraint tableName="employees" columnName="name"/>
+      constraintName="pk_customer"
+      tableName="customer"/>
+    <addNotNullConstraint tableName="customer" columnName="name"/>
+  </changeSet>
+
+  <changeSet id="2" author="Roman Firstov">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <tableExists tableName="order"/>
+      </not>
+    </preConditions>
+    <createTable tableName="order">
+      <column name="id" type="serial"/>
+      <column name="customer_id" type="serial"/>
+      <column name="price" type="numeric"/>
+    </createTable>
+    <addPrimaryKey columnNames="id"
+      constraintName="pk_order"
+      tableName="order"/>
+    <addNotNullConstraint tableName="order" columnName="price"/>
+    <addForeignKeyConstraint baseTableName="order" baseColumnNames="customer_id" constraintName="fk_customer" referencedTableName="customer"
+      referencedColumnNames="id"/>
   </changeSet>
 </databaseChangeLog>

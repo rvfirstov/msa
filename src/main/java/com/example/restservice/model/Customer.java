@@ -10,8 +10,8 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "employees")
-public class Employees {
+@Table(name = "customer")
+public class Customer {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,6 +21,6 @@ public class Employees {
   @Column(name = "name")
   private String name;
 
-  @Column(name = "age")
-  private Integer age;
+  @Column(name = "money")
+  private Integer money;
 }
