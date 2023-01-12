@@ -38,4 +38,25 @@
     <addForeignKeyConstraint baseTableName="order" baseColumnNames="customer_id" constraintName="fk_customer" referencedTableName="customer"
       referencedColumnNames="id"/>
   </changeSet>
+
+  <changeSet id="3" author="Roman Firstov">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <tableExists tableName="user"/>
+      </not>
+    </preConditions>
+    <createTable tableName="my_user">
+      <column name="id" type="serial"/>
+      <column name="username" type="varchar(50)"/>
+      <column name="password" type="varchar(50)"/>
+
+      <column name="account_non_expired" type="boolean"/>
+      <column name="account_non_locked" type="boolean"/>
+      <column name="credentials_non_expired" type="boolean"/>
+      <column name="enabled" type="boolean"/>
+    </createTable>
+    <addPrimaryKey columnNames="id"
+                   constraintName="pk_user"
+                   tableName="my_user"/>
+  </changeSet>
 </databaseChangeLog>
